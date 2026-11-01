@@ -23,7 +23,7 @@ Everything runs **client-side in the browser**. No backend, no build step, no np
 JS/ID namespace: `xr-` classes, `XRUtil`, `XEROX_PRESETS`, `getXeroxPreset`, `runXeroxEnsembleScan`
 (a back-compat `runCatalystEnsembleScan` alias is also exported).
 
-> **Trademark note:** XEROX is a registered trademark of Xerox Corporation. This build uses the name for a
+> **Trademark note:** XEROX is a registered trademark of Xerox cybersecurity This build uses the name for a
 > class/competition project. If it ever ships publicly, rename it (e.g. "Xerox" → "X-Shield", "Oxide") or secure
 > permission first.
 
