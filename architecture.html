@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Brain &amp; Tech Stack — XEROX</title>
+  <meta name="description" content="Inside the XEROX ensemble: semantic intent NLP, 16-feature URL Random Forest, DOM script inspection, DistilBERT attention and a live meta-scorer weight simulator.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f97316'/%3E%3Cpath d='M16 6l7 3v6c0 5-3 8-7 10-4-2-7-5-7-10V9l7-3z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.6 2.6 4.6-5' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/background.css">
+  <script src="js/vendor/lucide.min.js"></script>
+</head>
+<body>
+
+  <div id="xr-navbar"></div>
+
+  <main>
+    <section class="section--tight" style="padding-top:44px;">
+      <div class="container">
+        <div class="reveal">
+          <span class="section-eyebrow"><i data-lucide="brain-circuit"></i>The Brain · The Tech Stack</span>
+          <h1 style="font-size:clamp(1.9rem,3.6vw,2.9rem);">Three threat vectors. One calibrated decision.</h1>
+          <p style="color:#a8a29e;max-width:760px;margin-top:10px;">
+            Modern phishing is grammatically perfect, freshly registered and wrapped in obfuscated JavaScript.
+            XEROX stops looking for mistakes and starts measuring <strong style="color:#ebe5dd;">manipulation</strong>.
+          </p>
+        </div>
+
+        <!-- ============ 3-VECTOR BENTO ============ -->
+        <div class="section-head mt-4" style="margin-bottom:22px;">
+          <h2 style="font-size:1.5rem;">Vector 1 — the message is not the problem, the intent is</h2>
+        </div>
+
+        <div class="bento">
+          <div class="glass-card b-4">
+            <div class="card-title"><i data-lucide="brain-circuit"></i>Semantic intent NLP <span class="badge badge-amber" style="margin-left:6px;">60+ rule families</span></div>
+            <p class="text-sm" style="color:#a8a29e;">We do not score spelling or grammar. We score the psychological architecture of a message: urgency, authority, isolation, credential demand and financial extraction — then subtract protective language.</p>
+            <div class="message-surface" style="margin-top:14px;font-size:.86rem;">
+              Hi Priya, I need this handled <mark class="threat-highlight" title="Artificial deadline">strictly confidential, before 3:00 PM today</mark>. The escrow <mark class="threat-highlight" title="Financial extraction">wire of ₹48,50,000</mark> must be initiated, and please <mark class="threat-highlight" title="Isolation">keep this thread off the finance group</mark>. Reply to my <mark class="threat-highlight" title="Alternate inbox">alternate inbox</mark> — my corporate ID has sync issues.
+            </div>
+            <div class="flex items-center wrap gap-1 mt-2">
+              <span class="badge badge-danger">BEC</span><span class="badge badge-warn">Urgency</span><span class="badge badge-warn">Isolation</span><span class="badge badge-warn">Authority</span><span class="badge badge-danger">Financial</span>
+            </div>
+          </div>
+
+          <div class="glass-card b-2">
+            <div class="card-title"><i data-lucide="quote"></i>Same words, different intent</div>
+            <p class="text-xs" style="color:#a8a29e;">Context flips the verdict. A protective clause is treated as evidence <em>for</em> legitimacy, not as another keyword hit.</p>
+            <div class="alert-strip danger" style="margin-top:12px;font-size:.78rem;"><i data-lucide="shield-x"></i><span>“<strong>Share</strong> the 6-digit OTP with our officer.” → credential theft</span></div>
+            <div class="alert-strip safe" style="margin-top:8px;font-size:.78rem;"><i data-lucide="shield-check"></i><span>“<strong>Never share</strong> your OTP with anyone.” → protective</span></div>
+            <div class="alert-strip info" style="margin-top:8px;font-size:.78rem;"><i data-lucide="mail-check"></i><span>OTP-shaped digits alone never raise the score.</span></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 mt-3">
+          <div class="glass-card">
+            <div class="card-title"><i data-lucide="globe-lock"></i>Vector 2 — URL structure &amp; live telemetry</div>
+            <p class="text-sm" style="color:#a8a29e;">A flat “bad-domain list” is always one zero-day behind. Instead we measure the <em>shape</em> of the link and then ask the internet whether it is real.</p>
+            <ul class="xai-list" style="margin-top:14px;">
+              <li class="info"><span class="xi"><i data-lucide="binary"></i></span><span><strong>16 deterministic features</strong><br>Length, entropy, dots, hyphens, digits, @ symbols, IP hosts, punycode, risky TLDs, shorteners, query depth and Levenshtein brand distance.</span></li>
+              <li class="danger"><span class="xi"><i data-lucide="languages"></i></span><span><strong>RFC-3492 punycode decoding</strong><br><code class="mono">xn--pypal-4ve.com</code> decodes to <code class="mono">pаypal.com</code> with a Cyrillic “а”, then normalises to the real brand.</span></li>
+              <li class="safe"><span class="xi"><i data-lucide="calendar-clock"></i></span><span><strong>Live RDAP age + DNS auth</strong><br>Domains younger than 30 days are flagged; missing MX/SPF/DMARC reduces sender trust.</span></li>
+            </ul>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-title"><i data-lucide="code-2"></i>Vector 3 — DOM &amp; script inspection</div>
+            <p class="text-sm" style="color:#a8a29e;">The page you see is not always the code that runs. We parse the raw source and flag the machinery of theft.</p>
+            <ul class="xai-list" style="margin-top:14px;">
+              <li class="danger"><span class="xi"><i data-lucide="key-round"></i></span><span><strong>Credential forms → raw IP / bot webhook</strong><br>Password fields whose action leaves the origin are the signature of a harvester.</span></li>
+              <li class="danger"><span class="xi"><i data-lucide="braces"></i></span><span><strong>Obfuscated payloads</strong><br><code class="mono">eval(atob(…))</code>, <code class="mono">String.fromCharCode</code>, hex arrays and long base64 blobs.</span></li>
+              <li class="warn"><span class="xi"><i data-lucide="eye-off"></i></span><span><strong>Hidden frames &amp; anti-inspection</strong><br>Zero-pixel iframes, <code class="mono">oncontextmenu</code>, F12 blockers and <code class="mono">debugger</code> traps are annotated line by line.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ============ COMPARISON: LEGACY VS SHIELD ============ -->
+        <div class="section-head mt-4" style="margin-bottom:22px;">
+          <h2 style="font-size:1.5rem;">Why a grammar filter loses to generative AI</h2>
+        </div>
+        <div class="grid grid-2">
+          <div class="glass-card" style="border-color:rgba(239, 68, 68, .25);">
+            <div class="card-title"><i data-lucide="spell-check"></i>Legacy spam filter</div>
+            <div class="data-table-wrap"><table class="data-table"><tbody>
+              <tr><td>Looks for spelling mistakes</td><td><span class="badge badge-danger">AI writes flawlessly</span></td></tr>
+              <tr><td>Looks for “Dear Customer”</td><td><span class="badge badge-danger">Not present</span></td></tr>
+              <tr><td>Blacklist lookup</td><td><span class="badge badge-danger">Domain registered yesterday</span></td></tr>
+              <tr><td>Verdict on this email</td><td><span class="badge badge-danger"><i data-lucide="shield-off"></i>DELIVERED</span></td></tr>
+            </tbody></table></div>
+            <p class="text-xs mt-2" style="color:#a8a29e;">Result: confident delivery of a wire-fraud instruction.</p>
+          </div>
+          <div class="glass-card" style="border-color:rgba(16, 185, 129, .3);">
+            <div class="card-title"><i data-lucide="shield-check"></i>XEROX ensemble</div>
+            <div class="data-table-wrap"><table class="data-table"><tbody>
+              <tr><td>Semantic intent</td><td><span class="badge badge-danger">Authority + secrecy + wire</span></td></tr>
+              <tr><td>Sender forensics</td><td><span class="badge badge-danger">Reply-to domain mismatch</span></td></tr>
+              <tr><td>Live domain age</td><td><span class="badge badge-danger">Registered 2 days ago</span></td></tr>
+              <tr><td>Fused verdict</td><td><span class="badge badge-safe"><i data-lucide="shield-x"></i>FALSE · BLOCKED</span></td></tr>
+            </tbody></table></div>
+            <p class="text-xs mt-2" style="color:#a8a29e;">Result: the same flawless email is stopped on intent, structure and infrastructure — with the evidence shown.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TECH STACK / ENSEMBLE ============ -->
+    <section class="section" id="stack">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-eyebrow"><i data-lucide="git-merge"></i>The Tech Stack</span>
+          <h2>How the ensemble actually fuses.</h2>
+          <p>Traditional ML and deep learning contribute differently. A meta-scorer normalises their weights across whichever channels are active, then applies a critical override so one decisive signal cannot be averaged away.</p>
+        </div>
+
+        <div class="glass-card">
+          <div class="ensemble-diagram">
+            <div class="ens-stack">
+              <div class="ens-node active">
+                <div class="en-icon"><i data-lucide="brain-circuit"></i></div>
+                <h4>DistilBERT intent</h4>
+                <p>6-layer · 12-head transformer</p>
+                <div class="ens-weight">w<sub>nlp</sub> = 0.40</div>
+              </div>
+              <div class="ens-node">
+                <div class="en-icon" style="color:#fdba74;"><i data-lucide="git-fork"></i></div>
+                <h4>Random Forest URL</h4>
+                <p>16 tabular features · 200 estimators*</p>
+                <div class="ens-weight">w<sub>url</sub> = 0.35</div>
+              </div>
+              <div class="ens-node">
+                <div class="en-icon" style="color:var(--status-warn);"><i data-lucide="code-2"></i></div>
+                <h4>DOM inspector</h4>
+                <p>forms · obfuscation · frames</p>
+                <div class="ens-weight">w<sub>dom</sub> = 0.25</div>
+              </div>
+            </div>
+
+            <div style="text-align:center;">
+              <svg viewBox="0 0 300 260" width="100%" height="260" role="img" aria-label="Ensemble signal flow">
+                <defs>
+                  <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/>
+                  </linearGradient>
+                  <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <path d="M10 40 C 110 40, 110 130, 150 130" fill="none" stroke="url(#flowGrad)" stroke-width="2" class="flow-line"/>
+                <path d="M10 130 C 100 130, 110 130, 150 130" fill="none" stroke="url(#flowGrad)" stroke-width="2" class="flow-line"/>
+                <path d="M10 220 C 110 220, 110 130, 150 130" fill="none" stroke="url(#flowGrad)" stroke-width="2" class="flow-line"/>
+                <path d="M150 130 C 200 130, 200 60, 290 60" fill="none" stroke="url(#flowGrad)" stroke-width="2" class="flow-line"/>
+                <path d="M150 130 C 200 130, 200 200, 290 200" fill="none" stroke="url(#flowGrad)" stroke-width="2" class="flow-line"/>
+                <circle cx="150" cy="130" r="38" fill="rgba(249, 115, 22, .16)" stroke="#f97316" stroke-width="1.5" filter="url(#glow)"/>
+                <text x="150" y="124" text-anchor="middle" fill="#ebe5dd" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">META</text>
+                <text x="150" y="139" text-anchor="middle" fill="#fdba74" font-family="JetBrains Mono, monospace" font-size="8">SCORER</text>
+                <circle cx="150" cy="130" r="48" fill="none" stroke="rgba(249, 115, 22, .25)" stroke-width="1" stroke-dasharray="3 5"/>
+                <rect x="236" y="44" width="58" height="30" rx="8" fill="rgba(16, 185, 129, .14)" stroke="rgba(16, 185, 129, .5)"/>
+                <text x="265" y="63" text-anchor="middle" fill="#10b981" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="700">TRUE</text>
+                <rect x="236" y="185" width="58" height="30" rx="8" fill="rgba(239, 68, 68, .14)" stroke="rgba(239, 68, 68, .5)"/>
+                <text x="265" y="204" text-anchor="middle" fill="#ef4444" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="700">FALSE</text>
+                <text x="150" y="250" text-anchor="middle" fill="#57534e" font-family="JetBrains Mono, monospace" font-size="8">σ(wᵢ · sᵢ) + critical override</text>
+              </svg>
+              <span class="badge badge-orange">live signal flow</span>
+            </div>
+
+            <div class="ens-stack">
+              <div class="ens-node">
+                <div class="en-icon" style="color:#fde047;"><i data-lucide="globe-lock"></i></div>
+                <h4>Live DNS + RDAP</h4>
+                <p>dns.google · rdap.org</p>
+                <div class="ens-weight">trust modifier</div>
+              </div>
+              <div class="ens-node">
+                <div class="en-icon" style="color:#fca5a5;"><i data-lucide="phone-call"></i></div>
+                <h4>Web Speech vishing</h4>
+                <p>continuous STT · waveform</p>
+                <div class="ens-weight">channel 4</div>
+              </div>
+              <div class="ens-node">
+                <div class="en-icon" style="color:#fde047;"><i data-lucide="qr-code"></i></div>
+                <h4>jsQR + Tesseract</h4>
+                <p>quishing · screenshot OCR</p>
+                <div class="ens-weight">channel 5</div>
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-faint mt-2">* The published Scikit-Learn model uses 200 estimators over the 16 features. This browser build executes the same decision logic deterministically so it runs with zero backend.</p>
+        </div>
+
+        <!-- ============ WEIGHT SIMULATOR ============ -->
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px;margin-top:22px;" id="weight-simulator">
+          <div class="glass-card">
+            <div class="card-title"><i data-lucide="sliders-horizontal"></i>Interactive ensemble weight simulator</div>
+            <p class="text-sm" style="color:#a8a29e;">Adjust how much each channel contributes, choose an attack scenario, and watch the meta-scorer respond. Weights are always re-normalised across only the channels that have evidence.</p>
+
+            <div class="field" style="margin-top:16px;">
+              <label><i data-lucide="crosshair"></i>Attack scenario</label>
+              <select class="input" id="sim-scenario"></select>
+            </div>
+
+            <div class="grid grid-2" style="gap:0 18px;">
+              <div class="field">
+                <label><i data-lucide="brain-circuit"></i>NLP weight — <span id="w-nlp-val">40%</span></label>
+                <input type="range" class="xr-range" id="w-nlp" min="0" max="100" value="40">
+              </div>
+              <div class="field">
+                <label><i data-lucide="globe-lock"></i>URL weight — <span id="w-url-val">35%</span></label>
+                <input type="range" class="xr-range" id="w-url" min="0" max="100" value="35">
+              </div>
+              <div class="field">
+                <label><i data-lucide="code-2"></i>DOM weight — <span id="w-dom-val">25%</span></label>
+                <input type="range" class="xr-range" id="w-dom" min="0" max="100" value="25">
+              </div>
+              <div class="field">
+                <label><i data-lucide="sparkles"></i>Quick profiles</label>
+                <div class="flex wrap gap-1">
+                  <button class="btn btn-primary btn-sm" data-weight-preset="balanced">Balanced</button>
+                  <button class="btn btn-ghost btn-sm" data-weight-preset="nlp">NLP-heavy</button>
+                  <button class="btn btn-ghost btn-sm" data-weight-preset="url">URL-heavy</button>
+                  <button class="btn btn-ghost btn-sm" data-weight-preset="dom">Code-heavy</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="sim-bars" style="margin-top:8px;"></div>
+
+            <div class="alert-strip warn hidden" id="sim-override" style="margin-top:10px;"></div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-title"><i data-lucide="gavel"></i>Simulated verdict</div>
+            <div class="flex items-center justify-between wrap gap-2" style="margin-bottom:14px;">
+              <span class="verdict-badge idle" id="sim-verdict">TRUE — SAFE</span>
+              <span class="mono" id="sim-score" style="font-size:1.7rem;font-weight:700;color:#10b981;">0/100</span>
+            </div>
+            <p class="text-sm" id="sim-explain" style="color:#a8a29e;">Choose a scenario to see the dominant channel.</p>
+            <div class="divider" style="margin:18px 0;"></div>
+            <div class="card-title" style="font-size:.86rem;"><i data-lucide="scale"></i>Fusion formula</div>
+            <div class="message-surface mono" style="font-size:.78rem;max-height:none;">score =
+ Σ(wᵢ · sᵢ) / Σ(wᵢ)      ← active channels only
+
+if max(sᵢ) ≥ 90:
+    score = max(score, 93)   ← critical override
+
+verdict = TRUE      if score &lt; 35
+        = CAUTION   if 35 ≤ score &lt; 65
+        = FALSE     if score ≥ 65</div>
+            <div class="flex items-center wrap gap-1 mt-2">
+              <span class="badge badge-amber">normalised</span>
+              <span class="badge badge-warn">override ≥ 90</span>
+              <span class="badge badge-safe">explainable</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STACK SPEC TABLE ============ -->
+        <div class="section-head mt-4" style="margin-bottom:18px;">
+          <h2 style="font-size:1.5rem;">The components, precisely.</h2>
+        </div>
+        <div class="glass-card">
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Layer</th><th>Technology</th><th>What it contributes</th><th>Runs where</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Semantic NLP</strong></td><td class="cell-mono">DistilBERT (ONNX) + 60-rule intent engine</td><td>Manipulation intent, urgency, authority, credential demand, protective-context subtraction</td><td><span class="badge badge-amber">In-browser</span></td></tr>
+                <tr><td><strong>URL ML</strong></td><td class="cell-mono">Scikit-Learn RandomForestClassifier</td><td>16 lexical/structural features including Shannon entropy, punycode, Levenshtein brand distance</td><td><span class="badge badge-orange">In-browser logic</span></td></tr>
+                <tr><td><strong>Network ground truth</strong></td><td class="cell-mono">Google DoH · RDAP (rdap.org)</td><td>A/MX/TXT/DMARC existence, mail authentication, registration age</td><td><span class="badge badge-warn">Live API</span></td></tr>
+                <tr><td><strong>Voice</strong></td><td class="cell-mono">Web Speech API · Web Audio AnalyserNode</td><td>Continuous call transcript, interim hypotheses, RMS waveform, vishing signatures</td><td><span class="badge badge-amber">Browser API</span></td></tr>
+                <tr><td><strong>Image</strong></td><td class="cell-mono">jsQR · Tesseract.js · Whisper-tiny</td><td>QR payload decode, UPI parsing, screenshot OCR, optional audio transcription</td><td><span class="badge badge-amber">In-browser</span></td></tr>
+                <tr><td><strong>Code</strong></td><td class="cell-mono">DOMParser-style regex tokenizer</td><td>Credential-form targets, eval/atob obfuscation, hidden frames, anti-inspection, exfiltration</td><td><span class="badge badge-amber">In-browser</span></td></tr>
+                <tr><td><strong>Fusion</strong></td><td class="cell-mono">Meta-scorer + critical override</td><td>Weight-normalised fusion, corroboration bonus, calibrated TRUE/CAUTION/FALSE bands</td><td><span class="badge badge-orange">In-browser</span></td></tr>
+                <tr><td><strong>Optional cloud</strong></td><td class="cell-mono">Gemini · Google Safe Browsing</td><td>Independent structured second opinion, live threat-list match</td><td><span class="badge badge-neutral">User key</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-card mt-3">
+          <div class="card-title"><i data-lucide="timer"></i>Latency budget — first verdict without waiting for the network</div>
+          <div id="latency-bars">
+            <div class="score-row"><span class="score-name">Rule NLP</span><span class="score-bar"><i class="score-bar-fill" style="width:18%;background:#fbbf24"></i></span><span class="score-val">3 ms</span></div>
+            <div class="score-row"><span class="score-name">URL features</span><span class="score-bar"><i class="score-bar-fill" style="width:12%;background:#f97316"></i></span><span class="score-val">1 ms</span></div>
+            <div class="score-row"><span class="score-name">DOM scan</span><span class="score-bar"><i class="score-bar-fill" style="width:22%;background:#eab308"></i></span><span class="score-val">4 ms</span></div>
+            <div class="score-row"><span class="score-name">Fusion + XAI</span><span class="score-bar"><i class="score-bar-fill" style="width:26%;background:#10b981"></i></span><span class="score-val">6 ms</span></div>
+            <div class="score-row"><span class="score-name">Live DoH + RDAP</span><span class="score-bar"><i class="score-bar-fill" style="width:100%;background:rgba(168, 162, 158, .4)"></i></span><span class="score-val">async</span></div>
+          </div>
+          <p class="text-xs text-faint mt-2">The local verdict lands first; live DNS/RDAP and optional cloud checks enrich the same result when they return. If the network is blocked, the local verdict is still complete.</p>
+        </div>
+
+        <div class="center mt-4">
+          <a href="training.html" class="btn btn-primary"><i data-lucide="sliders-horizontal"></i>See how we calibrate the false-positive rate</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="xr-footer"></div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/background-cycler.js"></script>
+  <script src="js/presets-data.js"></script>
+  <script src="js/nlp-message-engine.js"></script>
+  <script src="js/url-network-engine.js"></script>
+  <script src="js/dom-script-engine.js"></script>
+  <script src="js/voice-call-engine.js"></script>
+  <script src="js/qr-image-engine.js"></script>
+  <script src="js/ensemble-controller.js"></script>
+  <script src="js/training-lab.js"></script>
+</body>
+</html>

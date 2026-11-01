@@ -1,0 +1,193 @@
+/* ============================================================
+   XEROX — background.css
+   The living colour field: four drifting aurora orbs tinted by
+   the active palette, driven by --xr-h1 … --xr-h4 (set in JS).
+   Palettes advance on a timer (default 45 min) across 100 variants.
+   ============================================================ */
+
+/* Palette hue channels. JS tweens these; the defaults keep the
+   original ember/amber look if scripting is unavailable. */
+:root {
+  --xr-h1: 22;
+  --xr-h2: 74;
+  --xr-h3: 214;
+  --xr-h4: 312;
+
+  /* Ambient glow + grid tokens consumed by main.css */
+  --bg-glow-1: rgba(249, 115, 22, 0.16);
+  --bg-glow-2: rgba(251, 191, 36, 0.10);
+  --bg-glow-3: rgba(249, 115, 22, 0.10);
+  --bg-grid: rgba(249, 115, 22, 0.045);
+}
+
+#xr-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+#xr-aurora[hidden] { display: none; }
+
+/* Tames the colour field so body copy keeps its contrast in every palette */
+#xr-aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(23, 19, 16, 0.30) 0%,
+      rgba(23, 19, 16, 0.20) 34%,
+      rgba(23, 19, 16, 0.34) 70%,
+      rgba(23, 19, 16, 0.55) 100%);
+  pointer-events: none;
+}
+
+.xr-orb {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  opacity: 0.9;
+}
+
+.xr-orb.o1 {
+  width: 74vmax; height: 74vmax;
+  left: -18vmax; top: -26vmax;
+  background: radial-gradient(circle at 50% 50%,
+    hsl(var(--xr-h1) 92% 58% / 0.46) 0%,
+    hsl(var(--xr-h1) 92% 52% / 0.20) 34%,
+    transparent 64%);
+  animation: xrDriftA 54s ease-in-out infinite alternate;
+}
+
+.xr-orb.o2 {
+  width: 62vmax; height: 62vmax;
+  right: -16vmax; top: -12vmax;
+  background: radial-gradient(circle at 50% 50%,
+    hsl(var(--xr-h2) 95% 60% / 0.40) 0%,
+    hsl(var(--xr-h2) 95% 54% / 0.16) 36%,
+    transparent 66%);
+  animation: xrDriftB 68s ease-in-out infinite alternate;
+}
+
+.xr-orb.o3 {
+  width: 70vmax; height: 70vmax;
+  left: 22vw; bottom: -34vmax;
+  background: radial-gradient(circle at 50% 50%,
+    hsl(var(--xr-h3) 88% 58% / 0.38) 0%,
+    hsl(var(--xr-h3) 88% 50% / 0.15) 38%,
+    transparent 68%);
+  animation: xrDriftC 61s ease-in-out infinite alternate;
+}
+
+.xr-orb.o4 {
+  width: 52vmax; height: 52vmax;
+  right: 8vw; bottom: -20vmax;
+  background: radial-gradient(circle at 50% 50%,
+    hsl(var(--xr-h4) 90% 62% / 0.34) 0%,
+    hsl(var(--xr-h4) 90% 54% / 0.13) 40%,
+    transparent 70%);
+  animation: xrDriftD 47s ease-in-out infinite alternate;
+}
+
+@keyframes xrDriftA {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(20vmax, 14vmax, 0) scale(1.22); }
+}
+@keyframes xrDriftB {
+  from { transform: translate3d(0, 0, 0) scale(1.08); }
+  to   { transform: translate3d(-16vmax, 18vmax, 0) scale(0.92); }
+}
+@keyframes xrDriftC {
+  from { transform: translate3d(0, 0, 0) scale(0.95); }
+  to   { transform: translate3d(14vmax, -12vmax, 0) scale(1.16); }
+}
+@keyframes xrDriftD {
+  from { transform: translate3d(0, 0, 0) scale(1.12); }
+  to   { transform: translate3d(-22vmax, -10vmax, 0) scale(0.96); }
+}
+@keyframes xrSpin { to { transform: rotate(360deg); } }
+
+/* ---------- Palette control pill ---------- */
+#xr-bg-panel {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 620;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px 7px 12px;
+  border-radius: 999px;
+  background: rgba(23, 19, 16, 0.82);
+  border: 1px solid rgba(168, 162, 158, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: #d6d0c8;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+#xr-bg-panel:hover { border-color: rgba(249, 115, 22, 0.45); box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55); }
+
+#xr-bg-panel .xr-bg-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: conic-gradient(
+    hsl(var(--xr-h1) 92% 58%),
+    hsl(var(--xr-h2) 95% 60%),
+    hsl(var(--xr-h3) 88% 58%),
+    hsl(var(--xr-h4) 90% 62%),
+    hsl(var(--xr-h1) 92% 58%));
+  box-shadow: 0 0 10px hsl(var(--xr-h1) 92% 58% / 0.7);
+  flex-shrink: 0;
+  animation: xrSpin 14s linear infinite;
+}
+#xr-bg-panel .xr-bg-name { letter-spacing: 0.04em; white-space: nowrap; max-width: 170px; overflow: hidden; text-overflow: ellipsis; }
+
+#xr-bg-panel button {
+  background: none;
+  border: 1px solid transparent;
+  color: #a8a29e;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid; place-items: center;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: all 0.18s ease;
+  padding: 0;
+}
+#xr-bg-panel button:hover { color: #fdba74; border-color: rgba(249, 115, 22, 0.4); background: rgba(249, 115, 22, 0.12); }
+#xr-bg-panel button:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
+#xr-bg-panel .xr-bg-controls { display: flex; align-items: center; gap: 2px; }
+
+#xr-bg-interval {
+  background: rgba(41, 37, 33, 0.9);
+  color: #a8a29e;
+  border: 1px solid rgba(168, 162, 158, 0.2);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 3px 6px;
+  cursor: pointer;
+  outline: none;
+}
+#xr-bg-interval:hover { border-color: rgba(249, 115, 22, 0.4); color: #fdba74; }
+
+@media (max-width: 640px) {
+  #xr-bg-panel { left: 12px; bottom: 12px; padding: 6px 6px 6px 10px; gap: 6px; }
+  #xr-bg-panel .xr-bg-name { max-width: 96px; font-size: 0.6rem; }
+  #xr-bg-interval { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xr-orb, #xr-bg-panel .xr-bg-dot { animation: none !important; }
+}
+
+@media print {
+  #xr-aurora, #xr-bg-panel { display: none !important; }
+}

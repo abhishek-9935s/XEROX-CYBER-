@@ -1,0 +1,164 @@
+/* ============================================================
+   XEROX — animations.css
+   Keyframes: radar scan, pulsing AI nodes, packet flow, glows.
+   ============================================================ */
+
+/* Sweeping radar scan beam (triggered while analysing) */
+@keyframes radarScan {
+  0%   { background-position: 0 -220px; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { background-position: 0 calc(100% + 220px); opacity: 0; }
+}
+
+/* Breathing glow on active ensemble nodes */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.28), 0 0 22px rgba(245, 158, 11, 0.12); }
+  50%      { box-shadow: 0 0 0 7px rgba(245, 158, 11, 0.06), 0 0 40px rgba(245, 158, 11, 0.38); }
+}
+
+/* Listening ring pulse for live call capture */
+@keyframes pulseGlowRing {
+  0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6), 0 0 0 0 rgba(239, 68, 68, 0.35); }
+  70%  { box-shadow: 0 0 0 13px rgba(239, 68, 68, 0), 0 0 0 26px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0), 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Data packets travelling Incoming → Ensemble → Shield */
+@keyframes packetFlow {
+  0%   { left: 0;   opacity: 0; transform: scale(0.6); }
+  12%  { opacity: 1; transform: scale(1); }
+  88%  { opacity: 1; transform: scale(1); }
+  100% { left: 100%; opacity: 0; transform: scale(0.6); }
+}
+
+/* Progress fill */
+@keyframes progressSweep {
+  0%   { width: 0%; }
+  70%  { width: 88%; }
+  100% { width: 100%; }
+}
+
+/* Entrances */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Status dot */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* Spinner + dots */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+  40%           { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Attention lines flowing through the ensemble diagram */
+@keyframes dashFlow {
+  to { stroke-dashoffset: -22; }
+}
+.flow-line { stroke-dasharray: 5 6; animation: dashFlow 0.9s linear infinite; }
+
+/* Gauge glow pulse for critical verdicts */
+@keyframes dangerPulse {
+  0%, 100% { box-shadow: 0 0 34px rgba(239, 68, 68, 0.28), inset 0 0 32px rgba(23, 19, 16, 0.5); }
+  50%      { box-shadow: 0 0 58px rgba(239, 68, 68, 0.55), inset 0 0 32px rgba(23, 19, 16, 0.5); }
+}
+.gauge-danger { animation: dangerPulse 2.2s ease-in-out infinite; }
+
+/* Scan line across the code inspector when inspecting */
+@keyframes codeScan {
+  0%   { top: 0; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.code-inspector { position: relative; }
+.code-inspector.inspecting::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 2px; z-index: 5;
+  background: linear-gradient(90deg, transparent, var(--status-danger), transparent);
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.7);
+  animation: codeScan 1.6s linear infinite; pointer-events: none;
+}
+
+/* Shimmer skeleton (while a live lookup is pending) */
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+.skeleton { position: relative; overflow: hidden; background: rgba(168, 162, 158, 0.09); border-radius: 6px; color: transparent !important; }
+.skeleton::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(168, 162, 158, 0.14), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+/* Hero headline accent underline sweep */
+@keyframes underlineGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.accent-underline { position: relative; display: inline-block; }
+.accent-underline::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 3px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-amber), var(--accent-orange));
+  transform-origin: left; animation: underlineGrow 0.9s 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Row flash when a log entry is added */
+@keyframes rowFlash {
+  0%   { background: rgba(245, 158, 11, 0.22); }
+  100% { background: transparent; }
+}
+.row-flash { animation: rowFlash 1.2s ease-out; }
+
+/* Stagger helpers */
+.stagger > * { animation: fadeUp 0.5s ease both; }
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger > *:nth-child(3) { animation-delay: 0.14s; }
+.stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger > *:nth-child(5) { animation-delay: 0.26s; }
+.stagger > *:nth-child(6) { animation-delay: 0.32s; }
+
+/* Fade-up on scroll (IntersectionObserver adds .in-view) */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+/* Hover glows */
+.glow-hover { transition: box-shadow 0.3s ease, border-color 0.3s ease; }
+.glow-hover:hover { box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.35), 0 0 36px rgba(249, 115, 22, 0.18); border-color: rgba(249, 115, 22, 0.4); }
+
+/* Verdict badge pop */
+@keyframes verdictPop {
+  0%   { transform: scale(0.86); opacity: 0; }
+  55%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.verdict-pop { animation: verdictPop 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Gauge needle sweep (score count-up handled in JS) */
+@keyframes ringPulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(249, 115, 22, 0)); }
+  50%      { filter: drop-shadow(0 0 18px rgba(249, 115, 22, 0.4)); }
+}
+.ring-pulse { animation: ringPulse 3.4s ease-in-out infinite; }
+
+/* Safety: never leave content invisible if IO never fires */
+.reveal-fallback .reveal { opacity: 1 !important; transform: none !important; }
+
+@media print {
+  .reveal { opacity: 1 !important; transform: none !important; }
+  body::before, body::after { display: none; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

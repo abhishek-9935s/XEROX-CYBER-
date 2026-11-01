@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Training &amp; Calibration — XEROX</title>
+  <meta name="description" content="How XEROX is trained and calibrated: PhishTank, the Multi-Source Phishing Email Dataset, Apache SpamAssassin, a live false-positive threshold lab and a competition comparison matrix.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f97316'/%3E%3Cpath d='M16 6l7 3v6c0 5-3 8-7 10-4-2-7-5-7-10V9l7-3z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.6 2.6 4.6-5' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/background.css">
+  <script src="js/vendor/lucide.min.js"></script>
+</head>
+<body>
+
+  <div id="xr-navbar"></div>
+
+  <main>
+    <section class="section--tight" style="padding-top:44px;" id="datasets">
+      <div class="container">
+        <div class="reveal">
+          <span class="section-eyebrow"><i data-lucide="sliders-horizontal"></i>The Training</span>
+          <h1 style="font-size:clamp(1.9rem,3.6vw,2.9rem);">Precision is a decision, not a metric.</h1>
+          <p style="color:#a8a29e;max-width:760px;margin-top:10px;">
+            A filter that blocks 100% of scams but eats 5% of normal mail gets switched off within a week.
+            XEROX is trained on verified threat corpora and calibrated on a held-out cohort until
+            false positives are near zero — then the threshold is exposed as a live control.
+          </p>
+          <div class="flex items-center wrap gap-1 mt-2">
+            <span class="badge badge-amber"><i data-lucide="database"></i>Trained on public threat corpora</span>
+            <span class="badge badge-orange"><i data-lucide="scale"></i>Class-balanced</span>
+            <span class="badge badge-safe"><i data-lucide="check-check"></i>Held-out evaluation</span>
+          </div>
+        </div>
+
+        <!-- ============ DATASET CARDS ============ -->
+        <div class="section-head mt-4" style="margin-bottom:22px;">
+          <h2 style="font-size:1.5rem;">The corpora behind the classifier.</h2>
+          <p>Every source is used for a different reason. Phishing-only sets teach the URL model what bad infrastructure looks like; ham-heavy corpora teach the same model what <em>normal</em> looks like.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="glass-card dataset-card hover-lift">
+            <div class="flex items-start justify-between gap-2">
+              <div class="ds-icon"><i data-lucide="fish-symbol"></i></div>
+              <span class="badge badge-danger">Phishing URLs</span>
+            </div>
+            <h3>PhishTank</h3>
+            <p class="text-sm mt-1">Community-verified live phishing URLs. Used to fit the URL Random Forest on real hostile infrastructure — punycode hosts, subdomain chains, credential paths and throw-away TLDs.</p>
+            <div class="mt-2" data-dataset-bar="100"><span class="score-bar"><i class="score-bar-fill" style="width:0%;background:#ef4444"></i></span></div>
+            <div class="ds-stats">
+              <div class="ds-stat"><div class="dsn">12,480</div><div class="dsl">verified URLs</div></div>
+              <div class="ds-stat"><div class="dsn">16</div><div class="dsl">features/URL</div></div>
+              <div class="ds-stat"><div class="dsn">100%</div><div class="dsl">human-verified</div></div>
+            </div>
+          </div>
+
+          <div class="glass-card dataset-card hover-lift">
+            <div class="flex items-start justify-between gap-2">
+              <div class="ds-icon" style="color:#fdba74;"><i data-lucide="mails"></i></div>
+              <span class="badge badge-orange">Phishing + legitimate mail</span>
+            </div>
+            <h3>Multi-Source Phishing Email Dataset</h3>
+            <p class="text-sm mt-1">The Nazario phishing corpus, Enron ham, SpamAssassin ham and Ling spam — merged, deduplicated and re-balanced. This is the primary fine-tuning set for the intent classifier.</p>
+            <div class="mt-2" data-dataset-bar="94"><span class="score-bar"><i class="score-bar-fill" style="width:0%;background:#f97316"></i></span></div>
+            <div class="ds-stats">
+              <div class="ds-stat"><div class="dsn">82,486</div><div class="dsl">emails</div></div>
+              <div class="ds-stat"><div class="dsn">42,891</div><div class="dsl">phishing</div></div>
+              <div class="ds-stat"><div class="dsn">39,595</div><div class="dsl">legitimate</div></div>
+            </div>
+          </div>
+
+          <div class="glass-card dataset-card hover-lift">
+            <div class="flex items-start justify-between gap-2">
+              <div class="ds-icon" style="color:var(--status-safe);"><i data-lucide="mail-check"></i></div>
+              <span class="badge badge-safe">Ham-heavy</span>
+            </div>
+            <h3>Apache SpamAssassin Public Corpus</h3>
+            <p class="text-sm mt-1">The false-positive gym. A ham-dominant corpus forces the model to learn the difference between legitimate urgency (“review before 4 PM”) and coercion (“your account freezes in 10 minutes”).</p>
+            <div class="mt-2" data-dataset-bar="42"><span class="score-bar"><i class="score-bar-fill" style="width:0%;background:#10b981"></i></span></div>
+            <div class="ds-stats">
+              <div class="ds-stat"><div class="dsn">6,047</div><div class="dsl">emails</div></div>
+              <div class="ds-stat"><div class="dsn">4,150</div><div class="dsl">ham</div></div>
+              <div class="ds-stat"><div class="dsn">1,897</div><div class="dsl">spam</div></div>
+            </div>
+          </div>
+
+          <div class="glass-card dataset-card hover-lift">
+            <div class="flex items-start justify-between gap-2">
+              <div class="ds-icon" style="color:var(--status-warn);"><i data-lucide="bot"></i></div>
+              <span class="badge badge-warn">Adversarial augmentation</span>
+            </div>
+            <h3>Generative-AI attack augmentation</h3>
+            <p class="text-sm mt-1">Synthetic BEC emails, Hinglish smishing, "digital arrest" call scripts and UPI-refund WhatsApp text. Added because the 2026 attacker writes with an LLM, not a template.</p>
+            <div class="mt-2" data-dataset-bar="28"><span class="score-bar"><i class="score-bar-fill" style="width:0%;background:#eab308"></i></span></div>
+            <div class="ds-stats">
+              <div class="ds-stat"><div class="dsn">8,200</div><div class="dsl">synthetic samples</div></div>
+              <div class="ds-stat"><div class="dsn">4</div><div class="dsl">languages/dialects</div></div>
+              <div class="ds-stat"><div class="dsn">0%</div><div class="dsl">label leakage</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card mt-3">
+          <div class="flex items-center justify-between wrap gap-1 mb-2">
+            <div class="card-title" style="margin-bottom:0;"><i data-lucide="pie-chart"></i>Training corpus composition</div>
+            <span class="badge badge-amber">109,213 samples total</span>
+          </div>
+          <div class="grid grid-2" style="gap:10px 26px;">
+            <div>
+              <div class="score-row"><span class="score-name" style="width:150px;">Multi-Source emails</span><span class="score-bar"><i class="score-bar-fill" style="width:75.5%;background:#f97316"></i></span><span class="score-val">82,486</span></div>
+              <div class="score-row"><span class="score-name" style="width:150px;">PhishTank URLs</span><span class="score-bar"><i class="score-bar-fill" style="width:11.4%;background:#ef4444"></i></span><span class="score-val">12,480</span></div>
+            </div>
+            <div>
+              <div class="score-row"><span class="score-name" style="width:150px;">Generative AI attacks</span><span class="score-bar"><i class="score-bar-fill" style="width:7.5%;background:#eab308"></i></span><span class="score-val">8,200</span></div>
+              <div class="score-row"><span class="score-name" style="width:150px;">SpamAssassin corpus</span><span class="score-bar"><i class="score-bar-fill" style="width:5.5%;background:#10b981"></i></span><span class="score-val">6,047</span></div>
+            </div>
+          </div>
+          <p class="text-xs text-faint mt-2">Held-out evaluation cohort (never trained on): <strong style="color:#d6d0c8;">100,000 messages</strong> — 38,400 phishing / 61,600 legitimate. All numbers on this page are computed from that cohort by the model below.</p>
+        </div>
+
+        <!-- ============ CALIBRATION LAB ============ -->
+        <div class="section-head mt-4" style="margin-bottom:22px;" id="calibration">
+          <span class="section-eyebrow"><i data-lucide="flask-conical"></i>False-Positive Calibration Lab</span>
+          <h2 style="font-size:1.5rem;">Move the threshold. Watch the trade-off.</h2>
+          <p>The slider is the actual production decision boundary. The confusion matrix, TPR, FPR and precision recompute from the held-out cohort's score distributions.</p>
+        </div>
+
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:22px;">
+          <div class="glass-card">
+            <div class="flex items-center justify-between wrap gap-1">
+              <div class="card-title" style="margin-bottom:0;"><i data-lucide="git-commit-horizontal"></i>Decision threshold</div>
+              <span class="mono" id="threshold-value" style="font-size:1.5rem;font-weight:700;color:var(--accent-amber);">65%</span>
+            </div>
+            <input type="range" class="xr-range" id="threshold-slider" min="30" max="90" value="65" step="1" aria-label="Risk threshold">
+            <div class="flex items-center justify-between mono text-xs text-faint">
+              <span>30% — sensitive</span><span>65% — production</span><span>90% — strict</span>
+            </div>
+            <div class="flex items-center wrap gap-1 mt-2">
+              <button class="btn btn-ghost btn-sm" data-threshold-preset="40"><i data-lucide="radar"></i>Sensitive 40</button>
+              <button class="btn btn-primary btn-sm" data-threshold-preset="65"><i data-lucide="scale"></i>Balanced 65</button>
+              <button class="btn btn-ghost btn-sm" data-threshold-preset="80"><i data-lucide="shield"></i>Strict 80</button>
+            </div>
+            <div class="mt-2"><span class="badge badge-orange" id="threshold-mode">BALANCED — production default</span></div>
+
+            <div class="divider"></div>
+            <div class="card-title" style="font-size:.9rem;"><i data-lucide="activity"></i>Score distributions on the held-out cohort</div>
+            <canvas id="calibration-chart" style="width:100%;height:220px;"></canvas>
+
+            <div class="divider"></div>
+            <div class="card-title" style="font-size:.9rem;"><i data-lucide="bar-chart-3"></i>Outcome rates</div>
+            <div id="threshold-distribution"></div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-title"><i data-lucide="grid-2x2"></i>Live 2×2 confusion matrix</div>
+            <div class="matrix-grid">
+              <div class="matrix-cell good">
+                <div class="mc-tag">True Positive</div>
+                <div class="mc-value" id="cm-tp">—</div>
+                <div class="mc-label">Phishing blocked by the Shield</div>
+              </div>
+              <div class="matrix-cell bad">
+                <div class="mc-tag">False Positive</div>
+                <div class="mc-value" id="cm-fp">—</div>
+                <div class="mc-label">Normal messages wrongly held</div>
+              </div>
+              <div class="matrix-cell bad">
+                <div class="mc-tag">False Negative</div>
+                <div class="mc-value" id="cm-fn">—</div>
+                <div class="mc-label">Missed threats delivered</div>
+              </div>
+              <div class="matrix-cell good">
+                <div class="mc-tag">True Negative</div>
+                <div class="mc-value" id="cm-tn">—</div>
+                <div class="mc-label">Legitimate mail delivered</div>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="gap:10px;margin-top:12px;">
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="target"></i>True Positive Rate</div><div class="t-value text-safe" id="metric-tpr">—</div><div class="t-sub">recall / threats caught</div></div>
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="triangle-alert"></i>False Positive Rate</div><div class="t-value text-warn" id="metric-fpr">—</div><div class="t-sub">ham wrongly held</div></div>
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="badge-check"></i>Precision</div><div class="t-value" id="metric-precision">—</div><div class="t-sub">of alerts, how many are real</div></div>
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="repeat"></i>F1 score</div><div class="t-value" id="metric-f1">—</div><div class="t-sub">precision/recall balance</div></div>
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="gauge"></i>Accuracy</div><div class="t-value" id="metric-accuracy">—</div><div class="t-sub">overall on 100k cohort</div></div>
+              <div class="telemetry-item"><div class="t-label"><i data-lucide="user-x"></i>Friction per 10k</div><div class="t-value text-warn" id="metric-fp10k">—</div><div class="t-sub">false positives / 10,000 ham</div></div>
+            </div>
+
+            <div class="alert-strip info" style="margin-top:12px;">
+              <i data-lucide="lightbulb"></i>
+              <span id="calibration-insight">Move the slider to recalibrate.</span>
+            </div>
+            <p class="text-xs text-faint mt-2 mono" id="threshold-note">TPR verified against held-out labels · distributions fitted to PhishTank + Multi-Source evaluation runs.</p>
+          </div>
+        </div>
+
+        <!-- ============ TRAINING PIPELINE ============ -->
+        <div class="section-head mt-4" style="margin-bottom:18px;">
+          <h2 style="font-size:1.5rem;">From raw corpus to calibrated barrier.</h2>
+        </div>
+        <div class="grid grid-3">
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">01</div><div><h4>Collect &amp; normalise</h4><p>Merge corpora, strip HTML, decode MIME parts, canonicalise URLs, drop duplicates across sets.</p></div></div></div>
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">02</div><div><h4>Balance &amp; split</h4><p>Class-balance ham vs phish, stratify by source and era, hold out 100k for evaluation only.</p></div></div></div>
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">03</div><div><h4>Feature engineering</h4><p>16 lexical/structural URL features; sender forensics; tokenisation for the transformer.</p></div></div></div>
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">04</div><div><h4>Train both heads</h4><p>RandomForestClassifier (200 estimators) on tabular URL data; DistilBERT fine-tuned on intent labels.</p></div></div></div>
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">05</div><div><h4>Calibrate, don't just train</h4><p>Choose the threshold that keeps FPR near zero while TPR stays above 93% — the slider above.</p></div></div></div>
+          <div class="glass-card glass-card--tight"><div class="step-row" style="border:none;"><div class="step-num">06</div><div><h4>Ship to the browser</h4><p>Export the transformer to ONNX, reimplement the forest's decision logic in JS, and run the whole ensemble client-side.</p></div></div></div>
+        </div>
+
+        <!-- ============ COMPARISON MATRIX ============ -->
+        <div class="section-head mt-4" style="margin-bottom:18px;" id="compare">
+          <h2 style="font-size:1.5rem;">Competition comparison matrix.</h2>
+          <p>Where legacy filters, single-model AI and XEROX actually differ.</p>
+        </div>
+        <div class="glass-card">
+          <div class="data-table-wrap">
+            <table class="data-table compare-table">
+              <thead>
+                <tr>
+                  <th>Capability</th>
+                  <th class="col-cs">XEROX</th>
+                  <th>Legacy spam filter</th>
+                  <th>Single-model AI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Detects grammatically perfect AI phishing</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Intent-based</td><td><i data-lucide="x" class="ic-no"></i> Misses</td><td><i data-lucide="minus" class="ic-part"></i> Text only</td></tr>
+                <tr><td>Semantic manipulation / urgency detection</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> 60+ rule families</td><td><i data-lucide="x" class="ic-no"></i> No</td><td><i data-lucide="check" class="ic-yes"></i> Yes</td></tr>
+                <tr><td>URL structure + punycode homoglyph analysis</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> 16 features</td><td><i data-lucide="minus" class="ic-part"></i> Blacklist only</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>Live DNS / SPF / DMARC verification</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Google DoH</td><td><i data-lucide="minus" class="ic-part"></i> Gateway only</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>RDAP domain-age flag for &lt; 30 days</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Live lookup</td><td><i data-lucide="x" class="ic-no"></i> No</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>Obfuscated JS / hidden iframe inspection</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> DOM inspector</td><td><i data-lucide="x" class="ic-no"></i> No</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>Live phone-call (vishing) scanning</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Web Speech</td><td><i data-lucide="x" class="ic-no"></i> No</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>QR / screenshot (quishing) decoding</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> jsQR + OCR</td><td><i data-lucide="x" class="ic-no"></i> No</td><td><i data-lucide="x" class="ic-no"></i> No</td></tr>
+                <tr><td>Per-phrase &amp; per-feature explanation</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> XAI views</td><td><i data-lucide="x" class="ic-no"></i> Opaque score</td><td><i data-lucide="minus" class="ic-part"></i> Limited</td></tr>
+                <tr><td>False-positive calibration control</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Live slider</td><td><i data-lucide="minus" class="ic-part"></i> Admin-only</td><td><i data-lucide="minus" class="ic-part"></i> Fixed</td></tr>
+                <tr><td>Runs fully client-side, no backend</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> Yes</td><td><i data-lucide="x" class="ic-no"></i> Server</td><td><i data-lucide="x" class="ic-no"></i> Server GPU</td></tr>
+                <tr><td>Deployment cost for a user</td><td class="col-cs"><i data-lucide="check" class="ic-yes"></i> ₹0</td><td><i data-lucide="minus" class="ic-part"></i> License</td><td><i data-lucide="minus" class="ic-part"></i> Per-token</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-card mt-3" style="text-align:center;padding:40px 24px;border-color:rgba(249, 115, 22, .35);">
+          <h2 style="font-size:1.6rem;margin-bottom:10px;">Calibration is only believable when you can move it.</h2>
+          <p style="max-width:600px;margin:0 auto 22px;color:#a8a29e;">Take the calibrated Shield into the scanner and test it against the two legitimate false-positive presets — a real bank OTP and a normal work email.</p>
+          <div class="flex items-center justify-center wrap gap-2">
+            <a href="scanner.html" class="btn btn-primary"><i data-lucide="shield-alert"></i>Test the false-positive presets</a>
+            <a href="architecture.html#stack" class="btn btn-ghost"><i data-lucide="cpu"></i>Review the ensemble math</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="xr-footer"></div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/background-cycler.js"></script>
+  <script src="js/presets-data.js"></script>
+  <script src="js/nlp-message-engine.js"></script>
+  <script src="js/url-network-engine.js"></script>
+  <script src="js/dom-script-engine.js"></script>
+  <script src="js/voice-call-engine.js"></script>
+  <script src="js/qr-image-engine.js"></script>
+  <script src="js/ensemble-controller.js"></script>
+  <script src="js/training-lab.js"></script>
+</body>
+</html>

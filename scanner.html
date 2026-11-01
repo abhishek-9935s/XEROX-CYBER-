@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Shield Scanner — XEROX</title>
+  <meta name="description" content="Scan any message, live phone call, URL, QR code, screenshot or webpage source with the XEROX omni-channel ensemble and inspect every piece of evidence.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f97316'/%3E%3Cpath d='M16 6l7 3v6c0 5-3 8-7 10-4-2-7-5-7-10V9l7-3z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.6 2.6 4.6-5' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/background.css">
+  <script src="js/vendor/lucide.min.js"></script>
+</head>
+<body>
+
+  <div id="xr-navbar"></div>
+
+  <main>
+    <section class="section--tight" style="padding-top:44px;">
+      <div class="container">
+        <!-- Header -->
+        <div class="flex items-end justify-between wrap gap-2 mb-3 reveal">
+          <div>
+            <span class="section-eyebrow"><i data-lucide="shield-half"></i>The Shield · Live Verifier</span>
+            <h1 style="font-size:clamp(1.9rem,3.6vw,2.9rem);">Omni-channel threat sandbox.</h1>
+            <p style="color:#a8a29e;max-width:680px;margin-top:10px;">
+              Five real engines, one verdict. Everything runs client-side — no upload, no backend.
+              Load a preset or paste your own input, then inspect exactly why the Shield said TRUE or FALSE.
+            </p>
+          </div>
+          <div class="flex items-center gap-1 wrap">
+            <span class="badge badge-amber"><i data-lucide="lock"></i>Local-first</span>
+            <span class="badge badge-orange"><i data-lucide="wifi"></i>Live DNS · RDAP</span>
+            <span class="badge badge-safe"><i data-lucide="fingerprint"></i>XAI evidence</span>
+          </div>
+        </div>
+
+        <!-- Preset bar -->
+        <div class="glass-card glass-card--tight mb-3">
+          <div class="flex items-center justify-between wrap gap-1 mb-1">
+            <span class="text-xs mono text-faint" style="letter-spacing:.14em;text-transform:uppercase;">8 competition presets — one click loads &amp; scans</span>
+            <span class="text-xs text-faint">6 scam · 2 legitimate false-positive tests</span>
+          </div>
+          <div class="preset-bar" data-preset-bar></div>
+        </div>
+
+        <!-- Workspace -->
+        <div class="scanner-grid">
+          <!-- ============ LEFT: INPUT CONSOLE ============ -->
+          <div class="scanner-input-panel">
+            <div class="glass-card scan-surface" id="scan-surface">
+              <div class="flex items-center justify-between wrap gap-1 mb-2">
+                <div class="card-title" style="margin-bottom:0;"><i data-lucide="terminal"></i>Input console — <span id="active-mode-label" style="color:var(--accent-amber);">Message / Email</span></div>
+                <span class="badge badge-neutral" title="Press 1–5 to switch channel, Ctrl+Enter to scan"><i data-lucide="keyboard"></i>1–5 modes · Ctrl+↵ scan</span>
+              </div>
+
+              <!-- Mode tabs -->
+              <div class="mode-tabs" role="tablist" aria-label="Scan modes">
+                <button class="mode-tab active" data-mode="text"><i data-lucide="message-square-lock"></i>Messages</button>
+                <button class="mode-tab" data-mode="call"><i data-lucide="phone-call"></i>Voice Calls</button>
+                <button class="mode-tab" data-mode="url"><i data-lucide="globe-lock"></i>URL / Link</button>
+                <button class="mode-tab" data-mode="qr"><i data-lucide="qr-code"></i>QR &amp; Screenshot</button>
+                <button class="mode-tab" data-mode="code"><i data-lucide="code-2"></i>Webpage Code</button>
+              </div>
+
+              <!-- ---------- PANEL: TEXT ---------- -->
+              <div class="mode-panel active" data-panel="text">
+                <div class="grid grid-2" style="gap:0 14px;">
+                  <div class="field">
+                    <label><i data-lucide="at-sign"></i>Sender address / SMS header</label>
+                    <input class="input" id="in-sender" placeholder="e.g. Raghav Mehta &lt;ceo-office@corp-board-portal.xyz&gt;" spellcheck="false">
+                  </div>
+                  <div class="field">
+                    <label><i data-lucide="type"></i>Subject</label>
+                    <input class="input" id="in-subject" placeholder="CONFIDENTIAL — wire before 3:00 PM">
+                  </div>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="align-left"></i>Email / SMS / WhatsApp body</label>
+                  <textarea class="textarea" id="in-body" rows="8" placeholder="Paste the full message here. Every URL and phone number is extracted automatically and routed to the URL engine."></textarea>
+                  <span class="input-hint">60+ intent families · sender forensics · link extraction · underlined phrases = fired rules</span>
+                </div>
+              </div>
+
+              <!-- ---------- PANEL: CALL ---------- -->
+              <div class="mode-panel" data-panel="call">
+                <div class="alert-strip warn hidden" id="call-support-warning" style="margin-bottom:14px;"></div>
+
+                <div class="waveform-shell">
+                  <span class="listening-ring" id="listening-ring"></span>
+                  <canvas id="call-waveform" height="120"></canvas>
+                  <div class="flex items-center justify-between wrap gap-1" style="margin-top:10px;">
+                    <span class="mono text-xs text-faint" id="call-status">Microphone idle — listener off.</span>
+                    <span class="flex items-center gap-1">
+                      <button class="btn btn-danger btn-sm" id="btn-call-start"><i data-lucide="mic"></i>Start Live Call Listener</button>
+                      <button class="btn btn-ghost btn-sm" id="btn-call-stop" disabled><i data-lucide="square"></i>Stop</button>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="alert-strip danger hidden" id="call-alert" style="margin-top:12px;"></div>
+
+                <div class="flex items-center justify-between wrap gap-1" style="margin-top:12px;">
+                  <span class="flex items-center gap-2">
+                    <span class="text-xs mono text-faint">LIVE RISK</span>
+                    <span class="mono" id="call-live-score" style="font-weight:700;color:#a8a29e;">—</span>
+                    <span class="verdict-badge idle" id="call-live-verdict" style="padding:3px 9px;font-size:.62rem;">IDLE</span>
+                  </span>
+                  <span class="text-xs text-faint">Put the caller on speakerphone</span>
+                </div>
+                <div class="transcript-stream" id="call-transcript">
+                  <div class="transcript-line"><span class="ts">00:00:00</span>Live transcript will appear here, one line per recognised sentence.</div>
+                </div>
+                <div id="call-live-feed" class="text-xs mt-1" style="color:var(--accent-amber);font-style:italic;min-height:18px;"></div>
+
+                <div class="divider" style="margin:18px 0;"></div>
+
+                <div class="field" style="margin-bottom:10px;">
+                  <label><i data-lucide="upload"></i>Analyse an audio file (Whisper-tiny, on-device)</label>
+                  <input type="file" class="input" id="audio-file" accept="audio/*">
+                  <span class="input-hint" id="audio-status">First run downloads ~40 MB of ONNX weights; you can also paste the transcript below.</span>
+                </div>
+
+                <div class="grid grid-2" style="gap:0 14px;">
+                  <div class="field">
+                    <label><i data-lucide="phone"></i>Caller / number (optional)</label>
+                    <input class="input" id="in-caller" placeholder="Unknown · +91 98••• •••••">
+                  </div>
+                  <div class="field">
+                    <label><i data-lucide="sparkles"></i>Tip</label>
+                    <span class="input-hint" style="padding-top:6px;">Speak a test line: “Read me the OTP or your account will be frozen.”</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="file-text"></i>Call transcript</label>
+                  <textarea class="textarea" id="in-transcript" rows="7" placeholder="Paste a call transcript, or let the live listener fill this automatically."></textarea>
+                </div>
+              </div>
+
+              <!-- ---------- PANEL: URL ---------- -->
+              <div class="mode-panel" data-panel="url">
+                <div class="field">
+                  <label><i data-lucide="link-2"></i>URL or domain to verify</label>
+                  <input class="input mono" id="in-url" placeholder="https://login.microsoftonline.com.document-share-verify.top/invoice" spellcheck="false">
+                  <span class="input-hint">Live Google DNS (A · MX · SPF · DMARC) + RDAP registration age + 16 structural features</span>
+                </div>
+                <div class="alert-strip info">
+                  <i data-lucide="wifi"></i>
+                  <span>The first verdict is computed locally in milliseconds; live DNS/RDAP telemetry is then attached from <code>dns.google/resolve</code> and <code>rdap.org</code>. If your browser blocks those origins, the structural verdict still stands.</span>
+                </div>
+                <div class="flex items-center wrap gap-1 mt-2">
+                  <span class="text-xs mono text-faint">SAMPLES:</span>
+                  <button class="preset-btn" data-url-sample="https://github.com/brightlabs/repo/pull/42" style="padding:5px 11px;font-size:.7rem;">github.com PR</button>
+                  <button class="preset-btn" data-url-sample="https://www.hdfcbank.com/personal/save/accounts" style="padding:5px 11px;font-size:.7rem;">hdfcbank.com</button>
+                  <button class="preset-btn" data-url-sample="https://hdfc-kyc-verify.top/update?token=9f4c2" style="padding:5px 11px;font-size:.7rem;">hdfc-kyc-verify.top</button>
+                  <button class="preset-btn" data-url-sample="https://xn--pypal-4ve.com/webapps/mpp/signin?cmd=_login-run" style="padding:5px 11px;font-size:.7rem;">xn--pypal-4ve</button>
+                </div>
+              </div>
+
+              <!-- ---------- PANEL: QR ---------- -->
+              <div class="mode-panel" data-panel="qr">
+                <div class="qr-stage" id="qr-stage">
+                  <div class="dropzone" id="qr-dropzone">
+                    <i data-lucide="scan-line"></i>
+                    <p><strong>Drop a QR code or message screenshot</strong></p>
+                    <p class="dz-sub">PNG · JPG · paste with Ctrl+V · webcam — jsQR decodes, Tesseract OCRs</p>
+                    <input type="file" id="qr-file" accept="image/*" style="display:none;">
+                  </div>
+                  <figure class="qr-figure" id="qr-figure" hidden>
+                    <img class="image-preview" id="qr-preview" alt="Uploaded QR code preview">
+                  </figure>
+                  <video id="qr-video" playsinline muted style="display:none;"></video>
+                </div>
+                <div class="qr-toolbar" id="qr-toolbar" hidden>
+                  <span class="qr-dims" id="qr-meta-dims">—</span>
+                  <span class="flex items-center gap-1">
+                    <button class="btn btn-ghost btn-sm" id="btn-qr-replace" type="button"><i data-lucide="refresh-cw"></i>Replace</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-qr-remove" type="button"><i data-lucide="trash-2"></i>Remove</button>
+                  </span>
+                </div>
+                <div class="qr-status-row">
+                  <span class="mono text-xs text-faint" id="qr-status">No image loaded.</span>
+                  <span class="flex items-center gap-1">
+                    <button class="btn btn-ghost btn-sm" id="btn-cam-start"><i data-lucide="camera"></i>Use webcam</button>
+                    <button class="btn btn-ghost btn-sm" id="btn-cam-stop"><i data-lucide="camera-off"></i>Stop cam</button>
+                  </span>
+                </div>
+
+                <div class="field" style="margin-top:16px;">
+                  <label><i data-lucide="clipboard-paste"></i>Decoded payload (editable)</label>
+                  <input class="input mono" id="qr-payload-input" placeholder="upi://pay?pa=…&amp;pn=…&amp;am=… or https://…" spellcheck="false">
+                </div>
+                <div class="field">
+                  <label><i data-lucide="message-square-quote"></i>Caption / context from the sender</label>
+                  <input class="input" id="in-qr-context" placeholder="e.g. &quot;Scan this QR to RECEIVE your ₹4,999 refund&quot;">
+                  <span class="input-hint" id="qr-caption-note"></span>
+                </div>
+
+                <div class="divider" style="margin:16px 0;"></div>
+                <div class="field" style="margin-bottom:8px;">
+                  <label><i data-lucide="scan-text"></i>Screenshot OCR (Tesseract.js)</label>
+                  <input type="file" class="input" id="ocr-file" accept="image/*">
+                  <span class="input-hint">Extracts the text from a message/email screenshot and runs it through NLP + URL engines.</span>
+                </div>
+                <div class="field">
+                  <label><i data-lucide="file-text"></i>OCR text</label>
+                  <textarea class="textarea" id="in-ocr-text" rows="4" placeholder="OCR output appears here — editable before scanning."></textarea>
+                </div>
+                <div id="qr-analysis"></div>
+              </div>
+
+              <!-- ---------- PANEL: CODE ---------- -->
+              <div class="mode-panel" data-panel="code">
+                <div class="field">
+                  <label><i data-lucide="code-2"></i>Webpage HTML / JavaScript source</label>
+                  <textarea class="textarea code-input" id="in-html" rows="12" spellcheck="false" placeholder="&lt;form action=&quot;http://185.216.71.44/collect.php&quot;&gt; … &lt;input type=&quot;password&quot;&gt; … &lt;iframe style=&quot;display:none&quot;&gt; … eval(atob(...))"></textarea>
+                  <span class="input-hint">Detects credential forms → IPs, eval/atob obfuscation, hidden iframes, F12 blockers, clipboard hijacks, bot-webhook exfiltration. The full source is annotated line-by-line.</span>
+                </div>
+                <div class="flex items-center wrap gap-1">
+                  <span class="text-xs mono text-faint">TIP:</span>
+                  <span class="text-xs text-faint">Load the “Obfuscated Login Stealer” preset to see the annotated viewer in action.</span>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex items-center wrap gap-2 mt-3">
+                <button class="btn btn-primary" id="btn-scan" style="flex:1;min-width:200px;">
+                  <i data-lucide="shield-alert"></i><span>Scan with XEROX</span>
+                </button>
+                <button class="btn btn-ghost" id="btn-scan-all"><i data-lucide="layers"></i>Scan all channels</button>
+                <button class="btn btn-ghost" id="btn-reset"><i data-lucide="rotate-ccw"></i>Clear</button>
+              </div>
+              <div class="scan-progress" id="scan-progress"><i></i></div>
+              <div class="flex items-center justify-between wrap gap-1 mt-1">
+                <span class="mono text-xs text-faint" id="scan-status">Ready. Choose a channel or load a preset.</span>
+                <span class="mono text-xs text-faint">Fusion weights: NLP 40 · URL 35 · DOM 25 (auto-normalised)</span>
+              </div>
+            </div>
+
+            <!-- Optional neural layer -->
+            <div class="glass-card glass-card--tight mt-2">
+              <div class="flex items-center justify-between wrap gap-1">
+                <div>
+                  <div class="card-title" style="margin-bottom:4px;"><i data-lucide="brain"></i>Optional neural layer</div>
+                  <p class="text-xs" style="color:#a8a29e;max-width:330px;">Load the real DistilBERT phishing-email classifier (ONNX) through Transformers.js. <span id="neural-status">Not loaded — the deterministic engine is already active.</span></p>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-load-neural"><i data-lucide="download"></i>Load DistilBERT (67 MB)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ RIGHT: TELEMETRY ============ -->
+          <div class="scanner-result-panel">
+            <!-- Verdict + gauge -->
+            <div class="glass-card">
+              <div class="flex items-center justify-between wrap gap-1 mb-2">
+                <div class="card-title" style="margin-bottom:0;"><i data-lucide="gauge"></i>Live explainable telemetry</div>
+                <span class="badge badge-neutral" id="verdict-mode"><i data-lucide="radio"></i>awaiting input</span>
+              </div>
+
+              <div class="flex items-center gap-3 wrap" style="justify-content:center;">
+                <div class="risk-gauge-wrap">
+                  <div class="risk-gauge-ring" id="risk-ring">
+                    <div class="risk-gauge-inner">
+                      <div class="risk-gauge-score" id="risk-score" style="color:#78716c;">0<span class="pct">/100</span></div>
+                      <div class="risk-gauge-label" id="risk-caption">NO SCAN YET</div>
+                    </div>
+                  </div>
+                  <div class="gauge-scale"><span>SAFE</span><span>SUSPICIOUS</span><span>SCAM</span></div>
+                </div>
+
+                <div style="flex:1;min-width:230px;">
+                  <div class="verdict-banner" id="verdict-banner">
+                    <span class="verdict-badge idle" id="verdict-badge"><i data-lucide="shield"></i><span>AWAITING SCAN</span></span>
+                    <p class="verdict-desc" id="verdict-title" style="margin-top:12px;">Load a preset or enter your own input and hit <strong>Scan with XEROX</strong>.</p>
+                    <p class="verdict-desc" id="verdict-desc"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="verdict-meta">
+                <div class="vm-item"><div class="vm-label">Ensemble risk</div><div class="vm-value" id="stat-score">—</div></div>
+                <div class="vm-item"><div class="vm-label">Confidence</div><div class="vm-value" id="stat-confidence">—</div></div>
+                <div class="vm-item"><div class="vm-label">Latency</div><div class="vm-value" id="stat-latency">—</div></div>
+                <div class="vm-item"><div class="vm-label">Barrier action</div><div class="vm-value" id="stat-action">Idle</div></div>
+              </div>
+
+              <div style="margin-top:18px;" id="component-bars">
+                <div class="score-row"><span class="score-name">NLP</span><span class="score-bar"><i class="score-bar-fill" style="width:0%"></i></span><span class="score-val">—</span></div>
+                <div class="score-row"><span class="score-name">URL RF</span><span class="score-bar"><i class="score-bar-fill" style="width:0%"></i></span><span class="score-val">—</span></div>
+                <div class="score-row"><span class="score-name">DOM</span><span class="score-bar"><i class="score-bar-fill" style="width:0%"></i></span><span class="score-val">—</span></div>
+              </div>
+            </div>
+
+            <!-- XAI tabs -->
+            <div class="glass-card mt-2" id="results-card">
+              <div class="card-title"><i data-lucide="scan-eye"></i>Why is this TRUE or FALSE?</div>
+              <div class="tabs" role="tablist">
+                <button class="tab-btn active" data-xai-tab="nlp"><i data-lucide="brain-circuit"></i>NLP Intent View</button>
+                <button class="tab-btn" data-xai-tab="url"><i data-lucide="globe-lock"></i>URL Random Forest</button>
+                <button class="tab-btn" data-xai-tab="dom"><i data-lucide="code-2"></i>Webpage Code</button>
+              </div>
+
+              <div class="tab-panel active" id="xai-nlp">
+                <div class="log-empty"><i data-lucide="brain-circuit"></i>No linguistic channel active yet. Scan a message, call transcript or OCR screenshot.</div>
+              </div>
+              <div class="tab-panel" id="xai-url">
+                <div class="log-empty"><i data-lucide="globe-lock"></i>No URL channel active yet. Scan a link, or include one in a message or QR code.</div>
+              </div>
+              <div class="tab-panel" id="xai-dom">
+                <div class="log-empty"><i data-lucide="code-2"></i>No webpage source analysed yet. Switch to the Webpage Code tab.</div>
+              </div>
+
+              <div class="divider"></div>
+              <div class="flex items-center justify-between wrap gap-1">
+                <div>
+                  <div class="card-title" style="margin-bottom:2px;"><i data-lucide="sparkles"></i>Optional live AI deep-check</div>
+                  <p class="text-xs" style="color:#a8a29e;">Run an independent Gemini review in parallel with the local ensemble.</p>
+                </div>
+                <button class="btn btn-ghost btn-sm" id="btn-deep-check"><i data-lucide="wand-sparkles"></i>Ask Gemini</button>
+              </div>
+              <div id="gemini-result" style="margin-top:12px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SESSION QUARANTINE LOG ============ -->
+        <div class="glass-card mt-3">
+          <div class="flex items-center justify-between wrap gap-2 mb-2">
+            <div>
+              <div class="card-title" style="margin-bottom:2px;"><i data-lucide="archive"></i>Session quarantine log <span class="badge badge-orange" style="margin-left:6px;" id="log-count">0</span></div>
+              <p class="text-xs" style="color:#a8a29e;">In-memory only. Toggle <strong>Mark FP</strong> on any entry to flag a false positive for threshold recalibration.</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="log-clear"><i data-lucide="trash-2"></i>Clear log</button>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table log-table">
+              <thead><tr><th>Time</th><th>Channel</th><th>Input</th><th class="num">Risk</th><th>Verdict</th><th>Calibration</th></tr></thead>
+              <tbody id="log-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Demo script hint -->
+        <div class="glass-card glass-card--tight mt-3">
+          <div class="card-title"><i data-lucide="clapperboard"></i>60-second competition demo script</div>
+          <div class="grid grid-3" style="gap:10px;">
+            <div class="step-row" style="border:none;padding:8px 0;"><div class="step-num">1</div><div><h4>Click “Fake Bank KYC SMS”</h4><p>Watch NLP fire OTP harvesting + suspension coercion while the URL engine flags the .top domain and live RDAP shows a brand-new registration.</p></div></div>
+            <div class="step-row" style="border:none;padding:8px 0;"><div class="step-num">2</div><div><h4>Click “Genuine Bank OTP”</h4><p>Same bank header and an OTP, but “never share” context flips the score to SAFE — proving the false-positive defense.</p></div></div>
+            <div class="step-row" style="border:none;padding:8px 0;"><div class="step-num">3</div><div><h4>Try the live call + QR</h4><p>Speak “install AnyDesk” into the mic, or load the UPI QR preset and watch the decoder expose the “scan to receive” lie.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="xr-footer"></div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/background-cycler.js"></script>
+  <script src="js/presets-data.js"></script>
+  <script src="js/nlp-message-engine.js"></script>
+  <script src="js/url-network-engine.js"></script>
+  <script src="js/dom-script-engine.js"></script>
+  <script src="js/voice-call-engine.js"></script>
+  <script src="js/qr-image-engine.js"></script>
+  <script src="js/ensemble-controller.js"></script>
+  <script>
+    /* URL sample chips + clipboard paste support */
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('[data-url-sample]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var input = document.getElementById('in-url');
+          if (input) { input.value = btn.getAttribute('data-url-sample'); input.focus(); }
+        });
+      });
+
+      document.addEventListener('paste', function (e) {
+        var items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf('image') === 0) {
+            var file = items[i].getAsFile();
+            if (file) {
+              var tab = document.querySelector('[data-mode="qr"]');
+              if (tab) tab.click();
+              var input = document.getElementById('qr-file');
+              if (input && window.DataTransfer) {
+                try {
+                  var dt = new DataTransfer();
+                  dt.items.add(file);
+                  input.files = dt.files;
+                  input.dispatchEvent(new Event('change'));
+                } catch (err) { /* older browsers: user can drop manually */ }
+              }
+            }
+            break;
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

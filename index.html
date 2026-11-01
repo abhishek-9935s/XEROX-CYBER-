@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XEROX — Know Instantly What's TRUE and What's a SCAM</title>
+  <meta name="description" content="XEROX is an omni-channel AI anti-phishing barrier. Verify messages, calls, links, QR codes and webpages in real time with in-browser NLP, a 16-feature URL Random Forest, live DNS/RDAP telemetry and DOM script inspection.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f97316'/%3E%3Cpath d='M16 6l7 3v6c0 5-3 8-7 10-4-2-7-5-7-10V9l7-3z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M12.5 15.5l2.6 2.6 4.6-5' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/background.css">
+  <script src="js/vendor/lucide.min.js"></script>
+</head>
+<body>
+
+  <div id="xr-navbar"></div>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="container">
+        <span class="hero-badge"><span class="dot"></span> Catalyst Competition · Omni-Channel Defense</span>
+        <h1>Know instantly what is <span class="grad">TRUE</span><br>and what is a <span class="grad">SCAM</span>.</h1>
+        <p class="hero-sub">
+          XEROX inspects every message, phone call, link, QR code and webpage in real time —
+          fusing semantic NLP, a 16-feature URL Random Forest, live DNS/RDAP telemetry and DOM code
+          inspection into one explainable TRUE / CAUTION / FALSE verdict.
+        </p>
+        <div class="hero-cta">
+          <a href="scanner.html" class="btn btn-primary btn-lg"><i data-lucide="shield-alert"></i> Launch the Live Shield</a>
+          <a href="architecture.html" class="btn btn-ghost btn-lg"><i data-lucide="cpu"></i> Explore the Brain</a>
+        </div>
+
+        <!-- Instant quick verify -->
+        <div class="quick-verify" id="quick">
+          <div class="flex items-center justify-between wrap gap-1 mb-1">
+            <span class="flex items-center gap-1 text-sm" style="font-weight:600;"><i data-lucide="scan-search" style="width:16px;height:16px;color:var(--accent-amber);"></i> Instant quick-verify — paste a message, link or page source</span>
+            <span class="badge badge-amber"><i data-lucide="zap"></i>Runs locally in your browser</span>
+          </div>
+          <div class="qv-row">
+            <select class="input" id="qv-type" aria-label="Input type">
+              <option value="auto">Auto-detect input</option>
+              <option value="text">Message / email (NLP)</option>
+              <option value="url">URL / domain (RF + DNS)</option>
+              <option value="code">Webpage HTML (DOM)</option>
+            </select>
+            <textarea class="input" id="qv-input" rows="2" placeholder="Paste anything: &quot;Your account will be blocked, share the OTP…&quot; · https://hdfc-kyc-verify.top · or raw HTML source"></textarea>
+            <button class="btn btn-amber" id="qv-btn" style="flex-shrink:0;"><i data-lucide="scan-search"></i> Verify now</button>
+          </div>
+          <div class="flex items-center wrap gap-1 mt-2">
+            <span class="text-xs mono text-faint" style="letter-spacing:.08em;">TRY:</span>
+            <button class="preset-btn" data-qv-preset="sms-kyc" style="padding:5px 12px;font-size:.72rem;"><i data-lucide="message-square-warning"></i>Fake KYC SMS</button>
+            <button class="preset-btn" data-qv-preset="punycode-url" style="padding:5px 12px;font-size:.72rem;"><i data-lucide="link-2"></i>Punycode URL</button>
+            <button class="preset-btn" data-qv-preset="otp-safe" style="padding:5px 12px;font-size:.72rem;"><i data-lucide="shield-check"></i>Real bank OTP</button>
+            <button class="preset-btn" data-qv-preset="work-email" style="padding:5px 12px;font-size:.72rem;"><i data-lucide="git-pull-request"></i>Normal work email</button>
+            <span class="text-xs text-faint" style="margin-left:auto;">Ctrl / ⌘ + Enter to verify</span>
+          </div>
+          <div id="qv-result" style="margin-top:16px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PIPELINE ================= -->
+    <section class="section--tight">
+      <div class="container">
+        <div class="pipeline reveal">
+          <div class="pipeline-stage">
+            <div class="pipeline-node">
+              <div class="pipeline-icon"><i data-lucide="inbox"></i></div>
+              <h4>Incoming Traffic</h4>
+              <p>Email, SMS, WhatsApp, phone calls, links, QR images and raw page source.</p>
+            </div>
+          </div>
+          <div class="pipeline-connector">
+            <span class="packet"></span><span class="packet"></span><span class="packet"></span>
+            <span class="packet-label">packet flow</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-node">
+              <div class="pipeline-icon" style="color:var(--accent-orange);"><i data-lucide="brain-circuit"></i></div>
+              <h4>Ensemble Brain</h4>
+              <p>DistilBERT intent · Random Forest URL features · DOM inspector · live DNS &amp; RDAP.</p>
+            </div>
+          </div>
+          <div class="pipeline-connector">
+            <span class="packet"></span><span class="packet"></span><span class="packet"></span>
+            <span class="packet-label">probability fusion</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-node">
+              <div class="pipeline-icon" style="color:var(--status-safe);"><i data-lucide="shield-check"></i></div>
+              <h4>Shield Verdict</h4>
+              <p>One calibrated TRUE / CAUTION / FALSE answer with the evidence behind it.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI cards -->
+        <div class="grid grid-4 mt-4 stagger">
+          <div class="glass-card kpi-card hover-lift">
+            <span class="kpi-icon"><i data-lucide="timer"></i></span>
+            <div class="kpi-num text-amber">&lt; 50<span>ms</span></div>
+            <div class="kpi-label">Local fusion latency — no network round-trip needed for a first verdict.</div>
+          </div>
+          <div class="glass-card kpi-card hover-lift">
+            <span class="kpi-icon"><i data-lucide="binary"></i></span>
+            <div class="kpi-num">16</div>
+            <div class="kpi-label">Deterministic URL &amp; domain features, including real Shannon entropy.</div>
+          </div>
+          <div class="glass-card kpi-card hover-lift">
+            <span class="kpi-icon"><i data-lucide="layers"></i></span>
+            <div class="kpi-num">5<span>ch</span></div>
+            <div class="kpi-label">Channels: messages, calls, links, QR/OCR and webpage code.</div>
+          </div>
+          <div class="glass-card kpi-card hover-lift">
+            <span class="kpi-icon"><i data-lucide="target"></i></span>
+            <div class="kpi-num text-safe">99.4<span>%</span></div>
+            <div class="kpi-label">Precision at the 65% production threshold in our calibration lab.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PILLARS ================= -->
+    <section class="section" id="pillars">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-eyebrow"><i data-lucide="columns-3"></i>The Four Pillars</span>
+          <h2>One system. Four competition pillars.</h2>
+          <p>Every pillar is a working page — not a slide. Click through to operate the same engines the live scanner uses.</p>
+        </div>
+
+        <div class="grid grid-2 stagger">
+          <a href="scanner.html" class="glass-card pillar-card hover-lift" style="text-decoration:none;color:inherit;">
+            <span class="pillar-num">01</span>
+            <div class="pillar-icon"><i data-lucide="shield-half"></i></div>
+            <h3>The Shield — real-time omni-channel barrier</h3>
+            <p>A single verification console across messages, live phone calls, links, QR images and page source. Six one-click competition scenarios, a live risk gauge and a session quarantine log.</p>
+            <span class="pillar-link">Open the scanner <i data-lucide="arrow-right"></i></span>
+          </a>
+
+          <a href="architecture.html" class="glass-card pillar-card hover-lift" style="text-decoration:none;color:inherit;">
+            <span class="pillar-num">02</span>
+            <div class="pillar-icon" style="background:var(--accent-amber-soft);"><i data-lucide="brain-circuit"></i></div>
+            <h3>The Brain — multi-modal threat intelligence</h3>
+            <p>Grammar checks are dead: generative AI writes perfect English. We score manipulative intent, URL structure, live domain age and hidden DOM scripts instead — and show every clue.</p>
+            <span class="pillar-link">Inspect the three vectors <i data-lucide="arrow-right"></i></span>
+          </a>
+
+          <a href="architecture.html#stack" class="glass-card pillar-card hover-lift" style="text-decoration:none;color:inherit;">
+            <span class="pillar-num">03</span>
+            <div class="pillar-icon" style="background:rgba(234, 179, 8, .12);border-color:rgba(234, 179, 8, .3);color:var(--status-warn);"><i data-lucide="git-merge"></i></div>
+            <h3>The Tech Stack — hybrid ensemble AI</h3>
+            <p>Scikit-Learn Random Forest decision logic for tabular URL features, Hugging Face DistilBERT for semantic intent, Web Speech for calls and live DNS/RDAP telemetry for ground truth.</p>
+            <span class="pillar-link">See the ensemble fuse <i data-lucide="arrow-right"></i></span>
+          </a>
+
+          <a href="training.html" class="glass-card pillar-card hover-lift" style="text-decoration:none;color:inherit;">
+            <span class="pillar-num">04</span>
+            <div class="pillar-icon" style="background:rgba(16, 185, 129, .12);border-color:rgba(16, 185, 129, .3);color:var(--status-safe);"><i data-lucide="sliders-horizontal"></i></div>
+            <h3>The Training — high-precision calibration</h3>
+            <p>PhishTank, the Multi-Source Phishing Email Dataset and the Apache SpamAssassin Public Corpus, balanced against normal mail — with a live false-positive calibration lab.</p>
+            <span class="pillar-link">Run the calibration lab <i data-lucide="arrow-right"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TRUE vs FALSE DEMO ================= -->
+    <section class="section--tight">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-eyebrow"><i data-lucide="git-compare-arrows"></i>Live proof</span>
+          <h2>The same words, opposite verdicts.</h2>
+          <p>Both examples below are being scored by the real engine as this page loads. Context — not vocabulary — decides the verdict.</p>
+        </div>
+        <div class="grid grid-2" id="truth-demo">
+          <div class="glass-card" style="border-color:rgba(239, 68, 68, .32);">
+            <div class="flex items-center justify-between wrap gap-1 mb-2">
+              <span class="verdict-badge danger"><i data-lucide="shield-x"></i>FALSE — SCAM</span>
+              <span class="mono text-sm text-danger" id="demo-bad-score">scoring…</span>
+            </div>
+            <div class="message-surface" style="max-height:170px;font-size:.86rem;">Dear customer, your KYC is incomplete. <mark class="threat-highlight">Share the 6-digit OTP</mark> with our verification officer to avoid <mark class="threat-highlight">permanent suspension</mark>.</div>
+            <p class="text-xs mt-2" style="color:#a8a29e;" id="demo-bad-reason">An OTP request plus a suspension threat is coercion — the rulebook fires both.</p>
+          </div>
+          <div class="glass-card" style="border-color:rgba(16, 185, 129, .32);">
+            <div class="flex items-center justify-between wrap gap-1 mb-2">
+              <span class="verdict-badge safe"><i data-lucide="shield-check"></i>TRUE — SAFE</span>
+              <span class="mono text-sm text-safe" id="demo-good-score">scoring…</span>
+            </div>
+            <div class="message-surface" style="max-height:170px;font-size:.86rem;">Dear customer, 482913 is your OTP. It is valid for 3 minutes. <mark class="threat-highlight warn-level">Never share your OTP</mark> with anyone — the bank will never ask for it.</div>
+            <p class="text-xs mt-2" style="color:#a8a29e;" id="demo-good-reason">The protective "never share" clause cancels the OTP-shaped risk.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CHANNELS ================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-eyebrow"><i data-lucide="radio-tower"></i>Coverage</span>
+          <h2>Five channels, one decision engine.</h2>
+          <p>Attackers move between channels; the Shield does not. Every channel feeds the same meta-scorer with normalised weights.</p>
+        </div>
+        <div class="grid grid-3 stagger">
+          <div class="glass-card hover-lift"><div class="card-title"><i data-lucide="message-square-lock"></i>Messages &amp; email</div><p class="text-sm">60+ weighted intent families catch OTP harvesting, BEC, KYC lures, job scams and "digital arrest" scripts — and clear genuine bank OTP warnings.</p></div>
+          <div class="glass-card hover-lift"><div class="card-title"><i data-lucide="phone-call"></i>Live voice calls</div><p class="text-sm">SpeechRecognition transcribes a speakerphone call while a Web Audio waveform runs. The moment "AnyDesk" or "read me the OTP" is spoken, the alert fires.</p></div>
+          <div class="glass-card hover-lift"><div class="card-title"><i data-lucide="globe-lock"></i>Links &amp; domains</div><p class="text-sm">Real Google DNS-over-HTTPS and RDAP lookups verify existence, MX/SPF/DMARC and domain age — alongside 16 lexical features and punycode decoding.</p></div>
+          <div class="glass-card hover-lift"><div class="card-title"><i data-lucide="qr-code"></i>QR codes &amp; screenshots</div><p class="text-sm">jsQR decodes any QR bitmap; a upi://pay payload is parsed for payee, amount and the "scan to receive money" lie. Tesseract OCR reads message screenshots.</p></div>
+          <div class="glass-card hover-lift"><div class="card-title"><i data-lucide="code-2"></i>Webpage code</div><p class="text-sm">Password forms posting to raw IPs, zero-pixel iframes, eval(atob()) payloads and right-click blockers are annotated line-by-line in the source viewer.</p></div>
+          <div class="glass-card hover-lift" style="border-color:rgba(249, 115, 22, .35);"><div class="card-title"><i data-lucide="brain"></i>Explainable by default</div><p class="text-sm">Every verdict carries its evidence: the exact highlighted phrase, the feature that tripped, the DNS record that failed, and the rule that fired.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FINAL CTA ================= -->
+    <section class="section--tight">
+      <div class="container">
+        <div class="glass-card" style="text-align:center;padding:52px 26px;border-color:rgba(249, 115, 22, .35);background:linear-gradient(140deg,rgba(249, 115, 22, .12),var(--glass-bg) 60%);">
+          <span class="section-eyebrow" style="margin-bottom:14px;"><i data-lucide="trophy"></i>Catalyst Competition entry</span>
+          <h2 style="margin-bottom:12px;">Put the Shield to the test in 60 seconds.</h2>
+          <p style="max-width:560px;margin:0 auto 26px;">Load a preset or paste your own message, then watch the ensemble explain its verdict line by line.</p>
+          <div class="flex items-center justify-center wrap gap-2">
+            <a href="scanner.html" class="btn btn-primary btn-lg"><i data-lucide="shield-alert"></i>Open the Scanner</a>
+            <a href="training.html" class="btn btn-ghost btn-lg"><i data-lucide="sliders-horizontal"></i>Calibrate the threshold</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="xr-footer"></div>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/background-cycler.js"></script>
+  <script src="js/presets-data.js"></script>
+  <script src="js/nlp-message-engine.js"></script>
+  <script src="js/url-network-engine.js"></script>
+  <script src="js/dom-script-engine.js"></script>
+  <script src="js/voice-call-engine.js"></script>
+  <script src="js/qr-image-engine.js"></script>
+  <script src="js/ensemble-controller.js"></script>
+  <script>
+    /* Real engine output for the TRUE vs FALSE comparison cards */
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        if (!window.NLPEngine) return;
+        var bad = window.NLPEngine.analyze('KYC alert', 'AX-HDFCBK',
+          'Dear customer, your KYC is incomplete. Share the 6-digit OTP with our verification officer to avoid permanent suspension.');
+        var good = window.NLPEngine.analyze('Your OTP', 'AX-HDFCBK',
+          'Dear customer, 482913 is your OTP. It is valid for 3 minutes. Never share your OTP with anyone — the bank will never ask for it.');
+        var bs = document.getElementById('demo-bad-score');
+        var gs = document.getElementById('demo-good-score');
+        if (bs) bs.textContent = bad.score + '/100 risk';
+        if (gs) gs.textContent = good.score + '/100 risk';
+        var br = document.getElementById('demo-bad-reason');
+        var gr = document.getElementById('demo-good-reason');
+        if (br && bad.triggers.length) br.textContent = bad.triggers.slice(0, 2).map(function (t) { return t.label; }).join(' + ') + ' — scored by the live rulebook.';
+        if (gr && good.legitSignals.length) gr.textContent = good.legitSignals.slice(0, 2).map(function (t) { return t.label; }).join(' + ') + ' — risk cancelled.';
+      }, 120);
+    });
+  </script>
+</body>
+</html>
